@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" class="page">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans&subset=latin,cyrillic">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Кекстаграм</title>
 </head>
+
 <body class="page__body">
     <form class="filters hidden" action="index.html" method="get" autocomplete="off">
         <input type="radio" id="filter-recommend" class="filters__radio" name="filter" value="recommend" checked>
@@ -36,7 +40,7 @@
                         <button type="button" 
                             class="upload-resize__control upload-resize__controls-button upload-resize__controls-button--dec">–
                         </button>
-                        <input type="text" class="upload-resize__control upload-resize__controls-value" value="55%" readonly title="Image Scale" name="scale"/>
+                        <input type="text" class="upload-resize__control upload-resize__controls-value" value="55%" readonly title="Image Scale" name="scale">
                         <button type="button"
                             class="upload-resize__control upload-resize__controls-button upload-resize__controls-button--inc">+
                         </button>
@@ -44,50 +48,50 @@
                     
                     <div class="upload-form__preview">
                         <div></div>
-                        <img src="img/upload-default-image.jpg" class="upload-form__preview-image">
+                        <img src="img/upload-default-image.jpg" alt="Милый котик" class="upload-form__preview-image">
                     </div>
 
                     <fieldset class="upload-effect__controls">
-                        <div class="upload-effect-level">
-                            <div class="upload-effect-level-line">
-                                <div class="upload-effect-level-pin"></div>
+                        <div class="upload-effect__level">
+                            <div class="upload-effect__level-line">
+                                <div class="upload-effect__level-pin"></div>
                                 <div class="upload-effect-level-val"></div>
                             </div>
                         </div>
 
                         <input type="radio" name="effect" id="upload-effect-none" value="none" checked>
                         <label class="upload-effect__label" for="upload-effect-none">
-                            <div class="upload-effect__preview"></div>
+                            <span class="upload-effect__preview"></span>
                             Оригинал
                         </label>
 
                         <input type="radio" name="effect" id="upload-effect-chrome" value="chrome">
                         <label class="upload-effect__label upload-effect__label--chrome" for="upload-effect-chrome">
-                            <div class="upload-effect__preview upload-effect__preview--chrome"></div>
+                            <span class="upload-effect__preview upload-effect__preview--chrome"></span>
                             Хром
                         </label>
 
                         <input type="radio" name="effect" id="upload-effect-sepia" value="sepia">
                         <label class="upload-effect__label upload-effect__label--sepia" for="upload-effect-sepia">
-                            <div class="upload-effect__preview upload-effect__preview--sepia"></div>
+                            <span class="upload-effect__preview upload-effect__preview--sepia"></span>
                             Сепия
                         </label>
 
                         <input type="radio" name="effect" id="upload-effect-marvin" value="marvin">
                         <label class="upload-effect__label upload-effect__label--marvin" for="upload-effect-marvin">
-                            <div class="upload-effect__preview upload-effect__preview--marvin"></div>
+                            <span class="upload-effect__preview upload-effect__preview--marvin"></span>
                             Марвин
                         </label>
 
                         <input type="radio" name="effect" id="upload-effect-phobos" value="phobos">
                         <label class="upload-effect__label upload-effect__label--phobos" for="upload-effect-phobos">
-                            <div class="upload-effect__preview upload-effect__preview--phobos"></div>
+                            <span class="upload-effect__preview upload-effect__preview--phobos"></span>
                             Фобос
                         </label>
 
                         <input type="radio" name="effect" id="upload-effect-heat" value="heat">
                         <label class="upload-effect__label upload-effect__label--heat" for="upload-effect-heat">
-                            <div class="upload-effect__preview upload-effect__preview--heat"></div>
+                            <span class="upload-effect__preview upload-effect__preview--heat"></span>
                             Зной
                         </label>
                     </fieldset>
@@ -109,19 +113,19 @@
 
     <footer class="footer container">
         <div class="footer__wrapper center-wrapper">
-            <section class="footer-logo">
+            <div class="footer-logo">
                 Сделано в <a tabindex="1" href="http://htmlacademy.ru" class="footer__link footer-logo__link">
-                    <img src="img/ha-logo.png" class="footer-logo__image" width="130" alt="HTML Academy"/>
+                    <img src="img/ha-logo.png" class="footer-logo__image" width="130" alt="HTML Academy">
                     HTML Academy</a> &copy; 2017
-            </section>
+            </div>
             <nav class="footer-social">
-                <a tabindex="1" href="https://twitter.com/htmlacademy_ru" alt="twitter"
+                <a tabindex="1" href="https://twitter.com/htmlacademy_ru"
                     class="footer-social__item footer-social__item--twitter footer__link" target="_blank" rel="nofollow">Twitter</a>
-                <a tabindex="1" href="https://www.instagram.com/htmlacademy/" alt="instagram"
+                <a tabindex="1" href="https://www.instagram.com/htmlacademy/"
                     class="footer-social__item footer-social__item--instagram footer__link" target="_blank" rel="nofollow">Instagtam</a>
-                <a tabindex="1" href="https://www.facebook.com/htmlacademy" alt="facebook"
+                <a tabindex="1" href="https://www.facebook.com/htmlacademy"
                     class="footer-social__item footer-social__item--facebook footer__link" target="_blank" rel="nofollow">Facebook</a>
-                <a tabindex="1" href="https://vk.com/htmlacademy" alt="vk"
+                <a tabindex="1" href="https://vk.com/htmlacademy"
                     class="footer-social__item footer-social__item--vk footer__link" target="_blank" rel="nofollow">VK</a>
             </nav>
         </div>
@@ -130,7 +134,7 @@
     <div class="gallery-overlay hidden">
         <span class="gallery-overlay__close">&times;</span>
         <div class="gallery-overlay__preview">
-            <img src="" class="gallery-overlay__image" alt="">
+            <img src="img/photos/9.jpg" class="gallery-overlay__image" alt="Девушка на пляже на фоне самолёта">
             <div class="gallery-overlay__controls">
                 <div class="gallery-overlay__control gallery-overlay__control--like">Нравится <span class="gallery-overlay__likes-count">0</span></div>
                 <div class="gallery-overlay__control gallery-overlay__control--comments"><span class="gallery-overlay__comments-count">125</span> комментариев</div>
@@ -148,4 +152,5 @@
         </a>
     </template>
 </body>
+
 </html>
