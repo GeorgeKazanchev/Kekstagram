@@ -70,6 +70,14 @@ const createPictureElements = (pictures) => {
     return pictures.map((picture) => createPictureElement(picture));
 };
 
+const renderPictureElements = (pictureElements) => {
+    const picturesContainerElement = document.querySelector('.pictures');
+    const fragment = new DocumentFragment();
+    fragment.append(...pictureElements);
+    picturesContainerElement.append(fragment);
+    picturesContainerElement.classList.remove('visually-hidden');
+};
+
 const pictures = generatePictures();
-const pitcuresElements = createPictureElements(pictures);
-console.log(pitcuresElements);
+const pitcureElements = createPictureElements(pictures);
+renderPictureElements(pitcureElements);

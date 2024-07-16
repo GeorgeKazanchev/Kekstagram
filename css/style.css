@@ -61,6 +61,7 @@
 }
 
 .upload-form {
+    position: absolute;
     width: 582px;
     height: 569px;
     margin-top: 25px;
@@ -403,6 +404,7 @@ input[type=radio]:checked+.upload-effect__label .upload-effect__preview {
 }
 
 .pictures {
+    margin-top: 15px;
     padding-bottom: 120px;
     padding-left: 12px;
     font-size: 12px;
