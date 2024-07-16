@@ -21,6 +21,8 @@ const DESCRIPTIONS = [
     `Вот это тачка!`
 ];
 
+const pictureTemplate = document.querySelector('#picture');
+
 const generatePicture = (index) => {
     const url = `photos/${index + 1}.jpg`;
     const likes = Math.floor(Math.random() * (MAX_LIKES_COUNT - MIN_LIKES_COUNT) + MIN_LIKES_COUNT);
@@ -50,4 +52,24 @@ const generatePictures = () => {
     return pictures;
 };
 
+const createPictureElement = (picture) => {
+    const pictureElement = pictureTemplate.content.cloneNode(true);
+
+    const imageElement = pictureElement.querySelector('.picture__image');
+    const likesElement = pictureElement.querySelector('.picture__stat--likes');
+    const commentsElement = pictureElement.querySelector('.picture__stat--comments');
+
+    imageElement.src = picture.url;    
+    likesElement.textContent = picture.likes;
+    commentsElement.textContent = picture.comments.length;
+
+    return pictureElement;
+};
+
+const createPictureElements = (pictures) => {
+    return pictures.map((picture) => createPictureElement(picture));
+};
+
 const pictures = generatePictures();
+const pitcuresElements = createPictureElements(pictures);
+console.log(pitcuresElements);

@@ -638,7 +638,7 @@ input[type=radio]:checked+.upload-effect__label .upload-effect__preview {
     vertical-align: bottom;
 }
 
-.picture__stats-item {
+.picture__stat {
     position: relative;
     margin: 0 5px;
     font-size: 14px;
@@ -646,7 +646,7 @@ input[type=radio]:checked+.upload-effect__label .upload-effect__preview {
     vertical-align: middle;
 }
 
-.picture__stats-item::before {
+.picture__stat::before {
     content: "";
     display: inline-block;
     position: relative;
@@ -656,13 +656,13 @@ input[type=radio]:checked+.upload-effect__label .upload-effect__preview {
     background: url("../img/image-icons-sprite.png") no-repeat 0 0;
 }
 
-.picture__stats-item--comments::before {
+.picture__stat--comments::before {
     width: 20px;
     height: 16px;
     background-position: 0 0;
 }
 
-.picture__stats-item--likes::before {
+.picture__stat--likes::before {
     width: 19px;
     height: 15px;
     background-position: -21px 0;
