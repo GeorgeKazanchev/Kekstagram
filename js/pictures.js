@@ -21,7 +21,20 @@ const DESCRIPTIONS = [
     `Вот это тачка!`
 ];
 
+const commentTemplate =
+    `<li class="social__comment social__comment--text">
+        <img class="social__picture" src="" alt="Аватар комментатора фотографии" width="35" height="35">
+        <p class="social__text"></p>
+    </li>`;
+
 const pictureTemplate = document.querySelector('#picture');
+const bigPictureElement = document.querySelector('.big-picture');
+
+const createElementFromTemplate = (template) => {
+    const templateContainer = document.createElement('div');
+    templateContainer.insertAdjacentHTML('afterbegin', template);
+    return templateContainer.firstElementChild;
+};
 
 const generatePicture = (index) => {
     const url = `photos/${index + 1}.jpg`;
@@ -48,26 +61,36 @@ const generatePictures = () => {
         const picture = generatePicture(i);
         pictures.push(picture);
     }
-
     return pictures;
 };
 
 const createPictureElement = (picture) => {
     const pictureElement = pictureTemplate.content.cloneNode(true);
-
     const imageElement = pictureElement.querySelector('.picture__img');
-    const likesElement = pictureElement.querySelector('.picture__likes');
-    const commentsElement = pictureElement.querySelector('.picture__comments');
-
-    imageElement.src = picture.url;    
-    likesElement.textContent = picture.likes;
-    commentsElement.textContent = picture.comments.length;
-
+    const likesCountElement = pictureElement.querySelector('.picture__likes');
+    const commentsCountElement = pictureElement.querySelector('.picture__comments');
+    imageElement.src = picture.url;
+    likesCountElement.textContent = picture.likes;
+    commentsCountElement.textContent = picture.comments.length;
     return pictureElement;
 };
 
 const createPictureElements = (pictures) => {
     return pictures.map((picture) => createPictureElement(picture));
+};
+
+const createCommentElement = (comment) => {
+    const commentElement = createElementFromTemplate(commentTemplate);
+    const imageElement = commentElement.querySelector('.social__picture');
+    const textElement = commentElement.querySelector('.social__text');
+    const imageNumber = Math.floor(Math.random() * 5 + 1);
+    imageElement.src = `img/avatar-${imageNumber}.svg`;
+    textElement.textContent = comment;
+    return commentElement;
+};
+
+const createCommentElements = (comments) => {
+    return comments.map((comment) => createCommentElement(comment));
 };
 
 const renderPictureElements = (pictureElements) => {
@@ -78,6 +101,40 @@ const renderPictureElements = (pictureElements) => {
     picturesContainerElement.classList.remove('visually-hidden');
 };
 
+const renderCommentsList = (commentElements) => {
+    const listElement = document.querySelector('.social__comments');
+    listElement.innerHTML = '';
+    const fragment = new DocumentFragment();
+    fragment.append(...commentElements);
+    listElement.append(fragment);
+};
+
+const renderBigPicture = (picture) => {
+    bigPictureElement.classList.remove('hidden');
+
+    const imageElement = bigPictureElement.querySelector('.big-picture__img');
+    const likesCountElement = bigPictureElement.querySelector('.likes-count');
+    const commentsCountElement = bigPictureElement.querySelector('.comments-count');
+    const descriptionElement = bigPictureElement.querySelector('.social__caption');
+
+    imageElement.src = picture.url;
+    likesCountElement.textContent = picture.likes;
+    commentsCountElement.textContent = picture.comments.length;
+    descriptionElement.textContent = picture.description;
+
+    const commentElements = createCommentElements(picture.comments);
+    renderCommentsList(commentElements);
+};
+
+const hideBigPictureComments = () => {
+    const commentsCountElement = bigPictureElement.querySelector('.social__comment-count');
+    const commentsLoaderElement = bigPictureElement.querySelector('.social__comments-loader');
+    commentsCountElement.classList.add('visually-hidden');
+    commentsLoaderElement.classList.add('visually-hidden');
+};
+
 const pictures = generatePictures();
 const pitcureElements = createPictureElements(pictures);
 renderPictureElements(pitcureElements);
+renderBigPicture(pictures[0]);
+hideBigPictureComments();
