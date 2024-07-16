@@ -55,9 +55,9 @@ const generatePictures = () => {
 const createPictureElement = (picture) => {
     const pictureElement = pictureTemplate.content.cloneNode(true);
 
-    const imageElement = pictureElement.querySelector('.picture__image');
-    const likesElement = pictureElement.querySelector('.picture__stat--likes');
-    const commentsElement = pictureElement.querySelector('.picture__stat--comments');
+    const imageElement = pictureElement.querySelector('.picture__img');
+    const likesElement = pictureElement.querySelector('.picture__likes');
+    const commentsElement = pictureElement.querySelector('.picture__comments');
 
     imageElement.src = picture.url;    
     likesElement.textContent = picture.likes;
