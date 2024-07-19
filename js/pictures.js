@@ -2,6 +2,7 @@ const PICTURES_COUNT = 25;
 const MIN_LIKES_COUNT = 15;
 const MAX_LIKES_COUNT = 200;
 const MAX_COMMENTS_COUNT = 2;
+const ESC_KEY_CODE = 27;
 
 const COMMENTS = [
     `Всё отлично!`,
@@ -29,6 +30,9 @@ const commentTemplate =
 
 const pictureTemplate = document.querySelector('#picture');
 const bigPictureElement = document.querySelector('.big-picture');
+const formInputElement = document.querySelector('#upload-file');
+const imgUploadFormElement = document.querySelector('.img-upload__overlay');
+const closeButtonElement = document.querySelector('.img-upload__cancel');
 
 const createElementFromTemplate = (template) => {
     const templateContainer = document.createElement('div');
@@ -133,8 +137,37 @@ const hideBigPictureComments = () => {
     commentsLoaderElement.classList.add('visually-hidden');
 };
 
+const addUploadFileFormChangeHandler = () => {
+    formInputElement.addEventListener('change', () => {
+        imgUploadFormElement.classList.remove('hidden');
+        setTimeout(() => closeButtonElement.focus(), 0);
+    });
+};
+
+const addUploadFileFormCloseClickHandler = () => {
+    closeButtonElement.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        closeUploadFileForm();
+    });
+};
+
+const addUploadFileFormCloseKeyDownHandler = () => {
+    imgUploadFormElement.addEventListener('keydown', (evt) => {
+        if (evt.keyCode === ESC_KEY_CODE) {
+            closeUploadFileForm();
+        }
+    });
+};
+
+const closeUploadFileForm = () => {
+    const imgUploadFormElement = document.querySelector('.img-upload__overlay');
+    imgUploadFormElement.classList.add('hidden');
+    formInputElement.value = '';
+};
+
 const pictures = generatePictures();
 const pitcureElements = createPictureElements(pictures);
 renderPictureElements(pitcureElements);
-renderBigPicture(pictures[0]);
-hideBigPictureComments();
+addUploadFileFormChangeHandler();
+addUploadFileFormCloseClickHandler();
+addUploadFileFormCloseKeyDownHandler();
