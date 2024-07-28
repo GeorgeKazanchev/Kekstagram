@@ -22,6 +22,24 @@ const DESCRIPTIONS = [
     `Вот это тачка!`
 ];
 
+const MIN_EFFECT_LEVEL = {
+    none: 0,
+    chrome: 0,
+    sepia: 0,
+    marvin: 0,
+    phobos: 0,
+    heat: 1
+};
+
+const MAX_EFFECT_LEVEL = {
+    none: 0,
+    chrome: 1,
+    sepia: 1,
+    marvin: 100,
+    phobos: 3,
+    heat: 3
+};
+
 const commentTemplate =
     `<li class="social__comment social__comment--text">
         <img class="social__picture" src="" alt="Аватар комментатора фотографии" width="35" height="35">
@@ -143,32 +161,34 @@ const hideBigPictureComments = () => {
     commentsLoaderElement.classList.add('visually-hidden');
 };
 
+const showUploadFileForm = () => {
+    imgUploadFormElement.classList.remove('hidden');
+    setTimeout(() => imgUploadCloseElement.focus(), 0);
+};
+
+const hideUploadFileForm = () => {
+    const imgUploadFormElement = document.querySelector('.img-upload__overlay');
+    imgUploadFormElement.classList.add('hidden');
+    formInputElement.value = '';
+};
+
 const addUploadFileFormChangeHandler = () => {
-    formInputElement.addEventListener('change', () => {
-        imgUploadFormElement.classList.remove('hidden');
-        setTimeout(() => imgUploadCloseElement.focus(), 0);
-    });
+    formInputElement.addEventListener('change', () => showUploadFileForm());
 };
 
 const addUploadFileFormCloseClickHandler = () => {
     imgUploadCloseElement.addEventListener('click', (evt) => {
         evt.preventDefault();
-        closeUploadFileForm();
+        hideUploadFileForm();
     });
 };
 
 const addUploadFileFormCloseKeyDownHandler = () => {
     imgUploadFormElement.addEventListener('keydown', (evt) => {
         if (evt.keyCode === ESC_KEY_CODE) {
-            closeUploadFileForm();
+            hideUploadFileForm();
         }
     });
-};
-
-const closeUploadFileForm = () => {
-    const imgUploadFormElement = document.querySelector('.img-upload__overlay');
-    imgUploadFormElement.classList.add('hidden');
-    formInputElement.value = '';
 };
 
 const addPicturesClickHandlers = (pictures) => {    //  TODO: Maybe, It'll be renamed
@@ -216,6 +236,42 @@ const addBigPictureCloseKeyDownHandler = () => {
     });
 };
 
+const getFilterStyleValue = (effect, effectLevel) => {
+    switch (effect) {
+        case 'none':
+            return ``;
+        case 'chrome':
+            return `grayscale(${effectLevel})`;
+        case 'sepia':
+            return `sepia(${effectLevel})`;
+        case 'marvin':
+            return `invert(${effectLevel}%)`;
+        case 'phobos':
+            return `blur(${effectLevel}px)`;
+        case 'heat':
+            return `brightness(${effectLevel})`;
+        default:
+            throw new Error('There is no given filter type.');  
+    }
+};
+
+const setEffectLevel = (sliderRelativePosition) => {
+    const selectedEffect = document.querySelector('.effects__radio[checked]').value;
+    const minEffectLevel = MIN_EFFECT_LEVEL[selectedEffect];
+    const maxEffectLevel = MAX_EFFECT_LEVEL[selectedEffect];
+    const curEffectLevel = sliderRelativePosition * (maxEffectLevel - minEffectLevel);
+
+    const uploadedPicture = document.querySelector('.img-upload__preview > img');
+    uploadedPicture.style.filter = getFilterStyleValue(selectedEffect, curEffectLevel);
+};
+
+const addEffectLevelSliderMouseUpHandler = () => {
+    const sliderElement = document.querySelector('.effect-level__slider');
+    sliderElement.addEventListener('mouseup', () => {
+        setEffectLevel(0.8);  //  TODO: Don't forget to change the argument
+    });
+};
+
 const pictures = generatePictures();
 const pictureElements = createPictureElements(pictures);
 showPictureElements(pictureElements);
@@ -227,3 +283,6 @@ addUploadFileFormCloseKeyDownHandler();
 addPicturesClickHandlers(pictures);
 addBigPictureCloseClickHandler();
 addBigPictureCloseKeyDownHandler();
+
+addEffectLevelSliderMouseUpHandler();
+showUploadFileForm();
