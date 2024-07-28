@@ -313,6 +313,7 @@ main {
 .img-upload__preview-container {
     position: relative;
     margin-bottom: 30px;
+    user-select: none;
 }
 
 .img-upload__scale {
@@ -440,6 +441,29 @@ main {
 
 .effect-level__value {
     display: none;
+}
+
+.effect-level__slider {
+    position: relative;
+    top: -5px;
+    left: calc((100% - 33px) / 2);  /* Slider's middle position */
+    width: 33px;
+    height: 33px;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid #555555;
+    border-radius: 50%;
+}
+
+.effect-level__slider:hover,
+.effect-level__slider:focus {
+    background-color: #aaaaaa;
+    cursor: pointer;
+}
+
+.effect-level__slider:active {
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .effects {
