@@ -97,7 +97,7 @@ const createCommentElements = (comments) => {
     return comments.map((comment) => createCommentElement(comment));
 };
 
-const renderPictureElements = (pictureElements) => {
+const showPictureElements = (pictureElements) => {
     const picturesContainerElement = document.querySelector('.pictures');
     const fragment = new DocumentFragment();
     fragment.append(...pictureElements);
@@ -113,10 +113,10 @@ const renderCommentsList = (commentElements) => {
     listElement.append(fragment);
 };
 
-const renderBigPicture = (picture) => {
+const showBigPicture = (picture) => {
     bigPictureElement.classList.remove('hidden');
 
-    const imageElement = bigPictureElement.querySelector('.big-picture__img');
+    const imageElement = bigPictureElement.querySelector('.big-picture__img > img');
     const likesCountElement = bigPictureElement.querySelector('.likes-count');
     const commentsCountElement = bigPictureElement.querySelector('.comments-count');
     const descriptionElement = bigPictureElement.querySelector('.social__caption');
@@ -165,9 +165,40 @@ const closeUploadFileForm = () => {
     formInputElement.value = '';
 };
 
+const addPicturesClickHandlers = (pictures) => {    //  TODO: Maybe, It'll be renamed
+    const pictureElements = document.querySelectorAll('.picture');
+    pictureElements.forEach((pictureElement) => {
+        pictureElement.addEventListener('click', (evt) => {
+            evt.preventDefault();
+            const picture = getPictureByElement(pictureElement, pictures);
+            showBigPicture(picture);
+            hideBigPictureComments();
+        });
+    });
+};
+
+const getPictureFilename = (url) => {
+    return url.split('/').at(-1);
+};
+
+const getPictureByElement = (pictureElement, pictures) => {
+    const givenPictureFilename = getPictureFilename(pictureElement.querySelector('.picture__img').src);
+    const foundPicture = pictures.find((picture) => {
+        const curPictureFilename = getPictureFilename(picture.url);
+        return curPictureFilename === givenPictureFilename;
+    });
+
+    if (foundPicture === undefined) {
+        throw new Error('Failed to find an appropriate picture for element.');
+    }
+
+    return foundPicture;
+};
+
 const pictures = generatePictures();
-const pitcureElements = createPictureElements(pictures);
-renderPictureElements(pitcureElements);
+const pictureElements = createPictureElements(pictures);
+showPictureElements(pictureElements);
 addUploadFileFormChangeHandler();
 addUploadFileFormCloseClickHandler();
 addUploadFileFormCloseKeyDownHandler();
+addPicturesClickHandlers(pictures);
