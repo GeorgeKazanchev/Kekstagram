@@ -30,9 +30,10 @@ const commentTemplate =
 
 const pictureTemplate = document.querySelector('#picture');
 const bigPictureElement = document.querySelector('.big-picture');
+const bigPictureCloseElement = document.querySelector('.big-picture__cancel');
 const formInputElement = document.querySelector('#upload-file');
 const imgUploadFormElement = document.querySelector('.img-upload__overlay');
-const closeButtonElement = document.querySelector('.img-upload__cancel');
+const imgUploadCloseElement = document.querySelector('.img-upload__cancel');
 
 const createElementFromTemplate = (template) => {
     const templateContainer = document.createElement('div');
@@ -115,6 +116,7 @@ const renderCommentsList = (commentElements) => {
 
 const showBigPicture = (picture) => {
     bigPictureElement.classList.remove('hidden');
+    setTimeout(() => bigPictureCloseElement.focus(), 0);    //  It's added for providing a way of closing picture by Esc
 
     const imageElement = bigPictureElement.querySelector('.big-picture__img > img');
     const likesCountElement = bigPictureElement.querySelector('.likes-count');
@@ -130,6 +132,10 @@ const showBigPicture = (picture) => {
     renderCommentsList(commentElements);
 };
 
+const hideBigPicture = () => {
+    bigPictureElement.classList.add('hidden');  
+};
+
 const hideBigPictureComments = () => {
     const commentsCountElement = bigPictureElement.querySelector('.social__comment-count');
     const commentsLoaderElement = bigPictureElement.querySelector('.social__comments-loader');
@@ -140,12 +146,12 @@ const hideBigPictureComments = () => {
 const addUploadFileFormChangeHandler = () => {
     formInputElement.addEventListener('change', () => {
         imgUploadFormElement.classList.remove('hidden');
-        setTimeout(() => closeButtonElement.focus(), 0);
+        setTimeout(() => imgUploadCloseElement.focus(), 0);
     });
 };
 
 const addUploadFileFormCloseClickHandler = () => {
-    closeButtonElement.addEventListener('click', (evt) => {
+    imgUploadCloseElement.addEventListener('click', (evt) => {
         evt.preventDefault();
         closeUploadFileForm();
     });
@@ -195,10 +201,29 @@ const getPictureByElement = (pictureElement, pictures) => {
     return foundPicture;
 };
 
+const addBigPictureCloseClickHandler = () => {
+    bigPictureCloseElement.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        hideBigPicture();
+    });
+};
+
+const addBigPictureCloseKeyDownHandler = () => {
+    bigPictureElement.addEventListener('keydown', (evt) => {
+        if (evt.keyCode === ESC_KEY_CODE) {
+            hideBigPicture();
+        }
+    });
+};
+
 const pictures = generatePictures();
 const pictureElements = createPictureElements(pictures);
 showPictureElements(pictureElements);
+
 addUploadFileFormChangeHandler();
 addUploadFileFormCloseClickHandler();
 addUploadFileFormCloseKeyDownHandler();
+
 addPicturesClickHandlers(pictures);
+addBigPictureCloseClickHandler();
+addBigPictureCloseKeyDownHandler();
