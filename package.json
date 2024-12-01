@@ -1,0 +1,19 @@
+{
+  "name": "kekstagram",
+  "version": "1.0.0",
+  "description": "Сервис обмена фотографиями",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint **/*.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "8.57.1",
+    "eslint": "8.57.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GeorgeKazanchev/Kekstagram"
+  },
+  "author": "George Kazanchev",
+  "license": "ISC"
+}
