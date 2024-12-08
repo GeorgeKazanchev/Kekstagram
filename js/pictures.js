@@ -28,9 +28,9 @@ const commentTemplate = document.querySelector('#comment');
 const picturesContainerElement = document.querySelector('.pictures');
 const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureCloseElement = document.querySelector('.big-picture__cancel');
-const formInputElement = document.querySelector('#upload-file');
-const imgUploadFormElement = document.querySelector('.img-upload__overlay');
-const imgUploadCloseElement = document.querySelector('.img-upload__cancel');
+const uploadInputElement = document.querySelector('#upload-file');
+const uploadPopupElement = document.querySelector('.img-upload__overlay');
+const uploadPopupCloseElement = document.querySelector('.img-upload__cancel');
 
 const getRandomArrayItem = (arr) => {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -120,34 +120,6 @@ const hideBigPictureComments = () => {
   bigPictureElement.querySelector('.social__comments-loader').classList.add('visually-hidden');
 };
 
-const addUploadFileFormChangeHandler = () => {
-  formInputElement.addEventListener('change', () => {
-    imgUploadFormElement.classList.remove('hidden');
-    setTimeout(() => imgUploadCloseElement.focus(), 0);
-  });
-};
-
-const addUploadFileFormCloseClickHandler = () => {
-  imgUploadCloseElement.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    closeUploadFileForm();
-  });
-};
-
-const addUploadFileFormCloseKeyDownHandler = () => {
-  imgUploadFormElement.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      closeUploadFileForm();
-    }
-  });
-};
-
-const closeUploadFileForm = () => {
-  const imgUploadFormElement = document.querySelector('.img-upload__overlay');
-  imgUploadFormElement.classList.add('hidden');
-  formInputElement.value = '';
-};
-
 const addPicturesClickHandlers = (pictures) => {
   //  TODO: Maybe, It'll be renamed
   const pictureElements = document.querySelectorAll('.picture');
@@ -196,10 +168,38 @@ const addBigPictureCloseKeyDownHandler = () => {
   });
 };
 
-addUploadFileFormChangeHandler();
-addUploadFileFormCloseClickHandler();
-addUploadFileFormCloseKeyDownHandler();
+const uploadPopupEscPressHandler = (evt) => {
+  if (evt.key === 'Escape') {
+    closeUploadPopup();
+  }
+};
+
+const openUploadPopup = () => {
+  uploadPopupElement.classList.remove('hidden');
+  document.addEventListener('keydown', uploadPopupEscPressHandler);
+};
+
+const closeUploadPopup = () => {
+  uploadPopupElement.classList.add('hidden');
+  uploadInputElement.value = '';
+  document.removeEventListener('keydown', uploadPopupEscPressHandler);
+};
 
 addPicturesClickHandlers(pictures);
 addBigPictureCloseClickHandler();
 addBigPictureCloseKeyDownHandler();
+
+uploadInputElement.addEventListener('change', () => {
+  openUploadPopup();
+});
+
+uploadPopupCloseElement.addEventListener('click', () => {
+  closeUploadPopup();
+});
+
+uploadPopupCloseElement.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Enter') {
+    evt.preventDefault();
+    closeUploadPopup();
+  }
+});
