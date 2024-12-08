@@ -4,6 +4,9 @@ const PICTURES_COUNT = 25;
 const MIN_LIKES_COUNT = 15;
 const MAX_LIKES_COUNT = 200;
 const MAX_COMMENTS_COUNT = 2;
+const MIN_SCALE_PERCENT = 25;
+const MAX_SCALE_PERCENT = 100;
+const DELTA_SCALE_PERCENT = 25;
 
 const COMMENTS = [
   `Всё отлично!`,
@@ -28,9 +31,15 @@ const commentTemplate = document.querySelector('#comment');
 const picturesContainerElement = document.querySelector('.pictures');
 const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureCloseElement = document.querySelector('.big-picture__cancel');
+
 const uploadInputElement = document.querySelector('#upload-file');
 const uploadPopupElement = document.querySelector('.img-upload__overlay');
 const uploadPopupCloseElement = document.querySelector('.img-upload__cancel');
+const uploadImageElement = document.querySelector('.img-upload__preview');
+
+const scaleSmallerElement = document.querySelector('.scale__control--smaller');
+const scaleBiggerElement = document.querySelector('.scale__control--bigger');
+const scaleInputElement = document.querySelector('.scale__control--value');
 
 const getRandomArrayItem = (arr) => {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -185,6 +194,20 @@ const closeUploadPopup = () => {
   document.removeEventListener('keydown', uploadPopupEscPressHandler);
 };
 
+const changeUploadImageScale = (value) => {
+  uploadImageElement.style.transform = `scale(${value * 0.01})`;
+};
+
+const changeScaleValue = (deltaPercent) => {
+  const prevValue = Number(scaleInputElement.value.replace('%', ''));
+  const newValue = prevValue + deltaPercent;
+  if (newValue < MIN_SCALE_PERCENT || newValue > MAX_SCALE_PERCENT) {
+    return;
+  }
+  scaleInputElement.value = `${newValue}%`;
+  changeUploadImageScale(newValue);
+};
+
 addPicturesClickHandlers(pictures);
 addBigPictureCloseClickHandler();
 addBigPictureCloseKeyDownHandler();
@@ -202,4 +225,12 @@ uploadPopupCloseElement.addEventListener('keydown', (evt) => {
     evt.preventDefault();
     closeUploadPopup();
   }
+});
+
+scaleSmallerElement.addEventListener('click', () => {
+  changeScaleValue(-DELTA_SCALE_PERCENT);
+});
+
+scaleBiggerElement.addEventListener('click', () => {
+  changeScaleValue(DELTA_SCALE_PERCENT);
 });
