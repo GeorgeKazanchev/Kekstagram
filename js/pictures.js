@@ -113,6 +113,13 @@ const pictures = generatePictures();
 const fragment = document.createDocumentFragment();
 pictures.forEach((picture) => {
   fragment.append(renderPicture(picture));
+
+  const pictureElement = fragment.lastElementChild;
+  pictureElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    openBigPicturePopup(picture);
+    hideBigPictureComments();
+  });
 });
 
 picturesContainerElement.append(fragment);
@@ -139,10 +146,7 @@ const renderComments = (comments, renderTo) => {
   renderTo.append(fragment);
 };
 
-const showBigPicture = (picture) => {
-  bigPictureElement.classList.remove('hidden');
-  setTimeout(() => bigPictureCloseElement.focus(), 0); //  It's added for providing a way of closing picture by Esc
-
+const setBigPicture = (picture) => {
   bigPictureElement.querySelector('.big-picture__img > img').src = picture.url;
   bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
   bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
@@ -153,66 +157,38 @@ const showBigPicture = (picture) => {
   renderComments(picture.comments, commentsContainer);
 };
 
-const hideBigPicture = () => {
-  bigPictureElement.classList.add('hidden');
-};
-
 const hideBigPictureComments = () => {
   bigPictureElement.querySelector('.social__comment-count').classList.add('visually-hidden');
   bigPictureElement.querySelector('.social__comments-loader').classList.add('visually-hidden');
 };
 
-const addPicturesClickHandlers = (pictures) => {
-  //  TODO: Maybe, It'll be renamed
-  const pictureElements = document.querySelectorAll('.picture');
-  pictureElements.forEach((pictureElement) => {
-    pictureElement.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      const picture = getPictureByElement(pictureElement, pictures);
-      showBigPicture(picture);
-      hideBigPictureComments();
-    });
-  });
-};
-
-const getPictureFilename = (url) => {
-  return url.split('/').at(-1);
-};
-
-const getPictureByElement = (pictureElement, pictures) => {
-  const givenPictureFilename = getPictureFilename(
-    pictureElement.querySelector('.picture__img').src
-  );
-  const foundPicture = pictures.find((picture) => {
-    const curPictureFilename = getPictureFilename(picture.url);
-    return curPictureFilename === givenPictureFilename;
-  });
-
-  if (foundPicture === undefined) {
-    throw new Error('Failed to find an appropriate picture for element.');
+const bigPicturePopupEscPressHandler = (evt) => {
+  if (evt.key === 'Escape') {
+    closeBigPicturePopup();
   }
-
-  return foundPicture;
 };
 
-const addBigPictureCloseClickHandler = () => {
-  bigPictureCloseElement.addEventListener('click', (evt) => {
+const openBigPicturePopup = (picture) => {
+  setBigPicture(picture);
+  bigPictureElement.classList.remove('hidden');
+  document.addEventListener('keydown', bigPicturePopupEscPressHandler);
+};
+
+const closeBigPicturePopup = () => {
+  bigPictureElement.classList.add('hidden');
+  document.removeEventListener('keydown', bigPicturePopupEscPressHandler);
+};
+
+bigPictureCloseElement.addEventListener('click', () => {
+  closeBigPicturePopup();
+});
+
+bigPictureCloseElement.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Enter') {
     evt.preventDefault();
-    hideBigPicture();
-  });
-};
-
-const addBigPictureCloseKeyDownHandler = () => {
-  bigPictureElement.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      hideBigPicture();
-    }
-  });
-};
-
-addPicturesClickHandlers(pictures);
-addBigPictureCloseClickHandler();
-addBigPictureCloseKeyDownHandler();
+    closeBigPicturePopup();
+  }
+});
 
 
 
