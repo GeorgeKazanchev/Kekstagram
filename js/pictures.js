@@ -7,6 +7,25 @@ const MAX_COMMENTS_COUNT = 2;
 const MIN_SCALE_PERCENT = 25;
 const MAX_SCALE_PERCENT = 100;
 const DELTA_SCALE_PERCENT = 25;
+const DEFAULT_EFFECT_LEVEL = 1;
+
+const MIN_EFFECT_LEVEL = {
+  none: 0,
+  chrome: 0,
+  sepia: 0,
+  marvin: 0,
+  phobos: 0,
+  heat: 1,
+};
+
+const MAX_EFFECT_LEVEL = {
+  none: 0,
+  chrome: 1,
+  sepia: 1,
+  marvin: 100,
+  phobos: 3,
+  heat: 3,
+};
 
 const COMMENTS = [
   `Всё отлично!`,
@@ -36,10 +55,20 @@ const uploadInputElement = document.querySelector('#upload-file');
 const uploadPopupElement = document.querySelector('.img-upload__overlay');
 const uploadPopupCloseElement = document.querySelector('.img-upload__cancel');
 const uploadImageElement = document.querySelector('.img-upload__preview');
+const uploadImagePictureElement = uploadImageElement.querySelector('img');
 
 const scaleSmallerElement = document.querySelector('.scale__control--smaller');
 const scaleBiggerElement = document.querySelector('.scale__control--bigger');
 const scaleInputElement = document.querySelector('.scale__control--value');
+
+const effectLevelElement = document.querySelector('.effect-level');
+const effectSliderElement = document.querySelector('.effect-level__slider');
+const effectInputElement = document.querySelector('.effect-level__value');
+const effectsControlElement = document.querySelector('.img-upload__effects');
+
+
+
+//  Генерация и рендеринг фото
 
 const getRandomArrayItem = (arr) => {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -87,6 +116,10 @@ pictures.forEach((picture) => {
 });
 
 picturesContainerElement.append(fragment);
+
+
+
+//  Работа с полноразмерным изображением
 
 const renderComment = (comment) => {
   const commentElement = commentTemplate.content.cloneNode(true);
@@ -177,6 +210,14 @@ const addBigPictureCloseKeyDownHandler = () => {
   });
 };
 
+addPicturesClickHandlers(pictures);
+addBigPictureCloseClickHandler();
+addBigPictureCloseKeyDownHandler();
+
+
+
+//  Загрузка фото; открытие/закрытие формы редактирования фото
+
 const uploadPopupEscPressHandler = (evt) => {
   if (evt.key === 'Escape') {
     closeUploadPopup();
@@ -194,24 +235,6 @@ const closeUploadPopup = () => {
   document.removeEventListener('keydown', uploadPopupEscPressHandler);
 };
 
-const changeUploadImageScale = (value) => {
-  uploadImageElement.style.transform = `scale(${value * 0.01})`;
-};
-
-const changeScaleValue = (deltaPercent) => {
-  const prevValue = Number(scaleInputElement.value.replace('%', ''));
-  const newValue = prevValue + deltaPercent;
-  if (newValue < MIN_SCALE_PERCENT || newValue > MAX_SCALE_PERCENT) {
-    return;
-  }
-  scaleInputElement.value = `${newValue}%`;
-  changeUploadImageScale(newValue);
-};
-
-addPicturesClickHandlers(pictures);
-addBigPictureCloseClickHandler();
-addBigPictureCloseKeyDownHandler();
-
 uploadInputElement.addEventListener('change', () => {
   openUploadPopup();
 });
@@ -227,10 +250,84 @@ uploadPopupCloseElement.addEventListener('keydown', (evt) => {
   }
 });
 
+
+
+//  Редактирование размера фото
+
+const changeUploadImageScale = (value) => {
+  uploadImageElement.style.transform = `scale(${value * 0.01})`;
+};
+
+const changeScaleValue = (deltaPercent) => {
+  const prevValue = Number(scaleInputElement.value.replace('%', ''));
+  const newValue = prevValue + deltaPercent;
+  if (newValue < MIN_SCALE_PERCENT || newValue > MAX_SCALE_PERCENT) {
+    return;
+  }
+  scaleInputElement.value = `${newValue}%`;
+  changeUploadImageScale(newValue);
+};
+
 scaleSmallerElement.addEventListener('click', () => {
   changeScaleValue(-DELTA_SCALE_PERCENT);
 });
 
 scaleBiggerElement.addEventListener('click', () => {
   changeScaleValue(DELTA_SCALE_PERCENT);
+});
+
+
+
+//  Наложение эффекта на фото
+
+const getEffectFilterValue = (effect, effectLevel) => {
+  switch (effect) {
+      case 'none':
+          return ``;
+      case 'chrome':
+          return `grayscale(${effectLevel})`;
+      case 'sepia':
+          return `sepia(${effectLevel})`;
+      case 'marvin':
+          return `invert(${effectLevel}%)`;
+      case 'phobos':
+          return `blur(${effectLevel}px)`;
+      case 'heat':
+          return `brightness(${effectLevel})`;
+      default:
+          throw new Error('There is no given filter type.');
+  }
+};
+
+const changeImageEffect = (effectLevel) => {
+  const effect = document.querySelector('.effects__radio:checked').value;
+  const scaledEffectLevel = effectLevel * (MAX_EFFECT_LEVEL[effect] - MIN_EFFECT_LEVEL[effect]);
+  uploadImagePictureElement.style.filter = getEffectFilterValue(effect, scaledEffectLevel);
+  effectInputElement.value = effectLevel;
+};
+
+effectSliderElement.addEventListener('mouseup', (evt) => {
+  const target = evt.target;
+  const fieldWidth = target.offsetParent.clientWidth - target.offsetWidth;
+  let effectLevel = (target.offsetLeft - target.offsetWidth / 2) / fieldWidth;
+  effectLevel = Math.floor(effectLevel * 1e+1) * 1e-1;
+  changeImageEffect(effectLevel);
+});
+
+effectsControlElement.addEventListener('change', (evt) => {
+  const effectButton = evt.target.closest('.effects__radio');
+  if (!effectButton) {
+    return;
+  }
+
+  const chosenEffect = effectButton.value;
+  if (chosenEffect === 'none') {
+    effectLevelElement.classList.add('hidden');
+  } else {
+    effectLevelElement.classList.remove('hidden');
+  }
+
+  uploadImagePictureElement.className = `effects__preview--${chosenEffect}`;
+  effectSliderElement.style.left = `calc(100% - ${effectSliderElement.offsetWidth}px / 2)`;
+  changeImageEffect(DEFAULT_EFFECT_LEVEL);
 });
