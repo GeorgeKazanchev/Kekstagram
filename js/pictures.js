@@ -4,10 +4,16 @@ const PICTURES_COUNT = 25;
 const MIN_LIKES_COUNT = 15;
 const MAX_LIKES_COUNT = 200;
 const MAX_COMMENTS_COUNT = 2;
+
 const MIN_SCALE_PERCENT = 25;
 const MAX_SCALE_PERCENT = 100;
 const DELTA_SCALE_PERCENT = 25;
+const DEFAULT_SCALE_PERCENT = 100;
+
 const DEFAULT_EFFECT_LEVEL = 1;
+
+const MAX_HASHTAGS_COUNT = 5;
+const MAX_HASHTAG_LENGTH = 20;
 
 const MIN_EFFECT_LEVEL = {
   none: 0,
@@ -52,10 +58,12 @@ const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureCloseElement = document.querySelector('.big-picture__cancel');
 
 const uploadInputElement = document.querySelector('#upload-file');
+const uploadFormElement = document.querySelector('.img-upload__form');
 const uploadPopupElement = document.querySelector('.img-upload__overlay');
 const uploadPopupCloseElement = document.querySelector('.img-upload__cancel');
 const uploadImageElement = document.querySelector('.img-upload__preview');
 const uploadImagePictureElement = uploadImageElement.querySelector('img');
+const uploadSubmitElement = document.querySelector('.img-upload__submit');
 
 const scaleSmallerElement = document.querySelector('.scale__control--smaller');
 const scaleBiggerElement = document.querySelector('.scale__control--bigger');
@@ -66,7 +74,8 @@ const effectSliderElement = document.querySelector('.effect-level__slider');
 const effectInputElement = document.querySelector('.effect-level__value');
 const effectsControlElement = document.querySelector('.img-upload__effects');
 
-
+const hashtagsInputElement = document.querySelector('.text__hashtags');
+const commentInputElement = document.querySelector('.text__description');
 
 //  Генерация и рендеринг фото
 
@@ -196,6 +205,11 @@ bigPictureCloseElement.addEventListener('keydown', (evt) => {
 
 const uploadPopupEscPressHandler = (evt) => {
   if (evt.key === 'Escape') {
+    if (evt.target.matches('.text__hashtags')
+      || evt.target.matches('.text__description')) {
+      return;
+    }
+
     closeUploadPopup();
   }
 };
@@ -207,7 +221,7 @@ const openUploadPopup = () => {
 
 const closeUploadPopup = () => {
   uploadPopupElement.classList.add('hidden');
-  uploadInputElement.value = '';
+  resetUploadForm();
   document.removeEventListener('keydown', uploadPopupEscPressHandler);
 };
 
@@ -279,6 +293,7 @@ const changeImageEffect = (effectLevel) => {
   const effect = document.querySelector('.effects__radio:checked').value;
   const scaledEffectLevel = effectLevel * (MAX_EFFECT_LEVEL[effect] - MIN_EFFECT_LEVEL[effect]);
   uploadImagePictureElement.style.filter = getEffectFilterValue(effect, scaledEffectLevel);
+  uploadImagePictureElement.className = `effects__preview--${effect}`;
   effectInputElement.value = effectLevel;
 };
 
@@ -303,7 +318,64 @@ effectsControlElement.addEventListener('change', (evt) => {
     effectLevelElement.classList.remove('hidden');
   }
 
-  uploadImagePictureElement.className = `effects__preview--${chosenEffect}`;
   effectSliderElement.style.left = `calc(100% - ${effectSliderElement.offsetWidth}px / 2)`;
   changeImageEffect(DEFAULT_EFFECT_LEVEL);
+});
+
+
+
+//  Валидация формы загрузки фото
+
+const validateHashtags = (hashtagsString) => {
+  const hashtags = hashtagsString.split(' ').filter((str) => str.length > 0);
+
+  if (hashtags.length > MAX_HASHTAGS_COUNT) {
+    hashtagsInputElement.setCustomValidity('Нельзя указать больше пяти хэш-тегов!');
+    return;
+  }
+
+  for (let i = 0; i < hashtags.length; ++i) {
+    const hashtag = hashtags[i];
+    if (hashtag[0] !== '#') {
+      hashtagsInputElement.setCustomValidity('Все хэш-теги должны начинаться с символа #!');
+      return;
+    }
+    if (hashtag.length === 1) {
+      hashtagsInputElement.setCustomValidity('Хэш-тег не должен состоять только из символа #!');
+      return;
+    }
+    if (hashtag.length > MAX_HASHTAG_LENGTH) {
+      hashtagsInputElement.setCustomValidity('Длина хэш-тега не должна превышать 20 символов!');
+      return;
+    }
+  }
+
+  const uniqueHashtags = Array.from(new Set(hashtags.map((hashtag) => hashtag.toLowerCase())));
+  if (hashtags.length !== uniqueHashtags.length) {
+    hashtagsInputElement.setCustomValidity('Нельзя использован один и тот же хэш-тег более одного раза!');
+    return;
+  }
+
+  hashtagsInputElement.setCustomValidity('');   //  Сброс сообщения в setCustomValidity(), если поле валидно
+};
+
+const resetUploadForm = () => {
+  uploadInputElement.value = '';
+
+  scaleInputElement.value = `${DEFAULT_SCALE_PERCENT}%`;
+  changeUploadImageScale(DEFAULT_SCALE_PERCENT);
+
+  effectLevelElement.classList.add('hidden');
+  effectSliderElement.style.left = `calc(100% - ${effectSliderElement.offsetWidth}px / 2)`;
+  document.querySelector('#effect-none').checked = true;
+  changeImageEffect(1);
+
+  hashtagsInputElement.value = '';
+  commentInputElement.value = '';
+  hashtagsInputElement.setCustomValidity('');
+  commentInputElement.setCustomValidity('');
+};
+
+uploadSubmitElement.addEventListener('click', () => {
+  validateHashtags(hashtagsInputElement.value);
 });

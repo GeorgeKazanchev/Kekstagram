@@ -37,6 +37,10 @@ main {
     position: relative;
 }
 
+input:invalid {
+    box-shadow: 0 0 5px 2px #ff3300;
+}
+
 .content-box-component {
     -webkit-box-sizing: content-box;
     box-sizing: content-box;
@@ -1130,6 +1134,10 @@ main {
         grid-row: 1 / span 3;
     }
 }
+
+/* .invalid {
+    box-shadow: 0 0 5px 2px #ff3300;
+} */
 
 .visually-hidden {
     position: absolute;

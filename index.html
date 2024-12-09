@@ -52,7 +52,7 @@
                                         <button type="button"
                                             class="scale__control  scale__control--smaller">Уменьшить</button>
                                         <input type="text" class="scale__control  scale__control--value" value="100%"
-                                            title="Image Scale" name="scale" readonly>
+                                            title="Image Scale" name="scale" readonly required>
                                         <button type="button"
                                             class="scale__control  scale__control--bigger">Увеличить</button>
                                     </fieldset>
@@ -65,7 +65,7 @@
 
                                     <!-- Изменение глубины эффекта, накладываемого на изображение -->
                                     <fieldset class="img-upload__effect-level  effect-level  hidden">
-                                        <input class="effect-level__value" type="number" name="effect-level" value="">
+                                        <input class="effect-level__value" type="number" name="effect-level" value="1" required>
                                         <div class="effect-level__slider" tabindex="0"></div>
                                     </fieldset>
 
@@ -138,7 +138,7 @@
                                 <fieldset class="img-upload__text text">
                                     <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег">
                                     <textarea class="text__description" name="description"
-                                        placeholder="Ваш комментарий..."></textarea>
+                                        maxlength="140" placeholder="Ваш комментарий..."></textarea>
                                 </fieldset>
 
                                 <!-- Кнопка для отправки данных на сервер -->
