@@ -58,7 +58,6 @@ const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureCloseElement = document.querySelector('.big-picture__cancel');
 
 const uploadInputElement = document.querySelector('#upload-file');
-const uploadFormElement = document.querySelector('.img-upload__form');
 const uploadPopupElement = document.querySelector('.img-upload__overlay');
 const uploadPopupCloseElement = document.querySelector('.img-upload__cancel');
 const uploadImageElement = document.querySelector('.img-upload__preview');
@@ -95,7 +94,7 @@ const generatePictures = () => {
       Math.random() * (MAX_LIKES_COUNT - MIN_LIKES_COUNT) + MIN_LIKES_COUNT
     );
     const description = getRandomArrayItem(DESCRIPTIONS);
-    const commentsCount = getRandomInRange(1, 2);
+    const commentsCount = getRandomInRange(1, MAX_COMMENTS_COUNT);
     const comments = new Array(commentsCount).fill(getRandomArrayItem(COMMENTS));
 
     pictures.push({
