@@ -300,12 +300,56 @@ const changeImageEffect = (effectLevel) => {
   effectInputElement.value = effectLevel;
 };
 
-effectSliderElement.addEventListener('mouseup', (evt) => {
+effectSliderElement.addEventListener('mousedown', (evt) => {
+  evt.preventDefault();
+
   const target = evt.target;
-  const fieldWidth = target.offsetParent.clientWidth - target.offsetWidth;
-  let effectLevel = (target.offsetLeft - target.offsetWidth / 2) / fieldWidth;
-  effectLevel = Math.floor(effectLevel * 1e+1) * 1e-1;
-  changeImageEffect(effectLevel);
+  const parent = target.offsetParent;
+  const parentCoords = parent.getBoundingClientRect();
+  const sliderRadius = effectSliderElement.offsetWidth / 2;
+  const fieldWidth = parent.clientWidth - target.offsetWidth;
+
+  const minX = sliderRadius;
+  const maxX = parent.clientWidth - sliderRadius;
+
+  let startX = evt.clientX;
+
+  const moveSlider = (clientX) => {
+    const shiftX = clientX - startX;
+    startX = clientX;
+
+    let currentX = effectSliderElement.offsetLeft + shiftX;
+    if (clientX < parentCoords.left + sliderRadius) {
+      currentX = minX;
+    } else if (clientX > parentCoords.right - sliderRadius) {
+      currentX = maxX;
+    }
+
+    effectSliderElement.style.left = `${currentX}px`;
+  };
+
+  const changeEffectLevel = () => {
+    let effectLevel = (target.offsetLeft - sliderRadius) / fieldWidth;
+    effectLevel = Math.floor(effectLevel * 1e+2) * 1e-2;
+    changeImageEffect(effectLevel);
+  };
+
+  const mouseMoveHandler = (moveEvt) => {
+    moveEvt.preventDefault();
+    moveSlider(moveEvt.clientX);
+    changeEffectLevel();
+  };
+
+  const mouseUpHandler = (upEvt) => {
+    upEvt.preventDefault();
+    moveSlider(upEvt.clientX);
+    changeEffectLevel();
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
 });
 
 effectsControlElement.addEventListener('change', (evt) => {
