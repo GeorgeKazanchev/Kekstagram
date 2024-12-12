@@ -179,11 +179,13 @@ const bigPicturePopupEscPressHandler = (evt) => {
 const openBigPicturePopup = (picture) => {
   setBigPicture(picture);
   bigPictureElement.classList.remove('hidden');
+  document.body.classList.add('modal-open');
   document.addEventListener('keydown', bigPicturePopupEscPressHandler);
 };
 
 const closeBigPicturePopup = () => {
   bigPictureElement.classList.add('hidden');
+  document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', bigPicturePopupEscPressHandler);
 };
 
@@ -215,11 +217,13 @@ const uploadPopupEscPressHandler = (evt) => {
 
 const openUploadPopup = () => {
   uploadPopupElement.classList.remove('hidden');
+  document.body.classList.add('modal-open');
   document.addEventListener('keydown', uploadPopupEscPressHandler);
 };
 
 const closeUploadPopup = () => {
   uploadPopupElement.classList.add('hidden');
+  document.body.classList.remove('modal-open');
   resetUploadForm();
   document.removeEventListener('keydown', uploadPopupEscPressHandler);
 };
