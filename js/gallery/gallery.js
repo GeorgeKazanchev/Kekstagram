@@ -3,10 +3,13 @@
 (function() {
   const errorMessageTemplate = document.querySelector('#error');
 
+  const PICTURES_COUNT = 25;
+
   const loadingSuccessHandler = (pictures) => {
     const fragment = document.createDocumentFragment();
+    const shownPictures = pictures.slice(0, PICTURES_COUNT);
 
-    pictures.forEach((picture) => {
+    shownPictures.forEach((picture) => {
       fragment.append(window.picture.renderPicture(picture));
 
       const pictureElement = fragment.lastElementChild;
