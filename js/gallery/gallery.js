@@ -1,19 +1,39 @@
 'use strict';
 
 (function() {
-  const pictures = window.data.generatePictures();
-  const fragment = document.createDocumentFragment();
+  const errorMessageTemplate = document.querySelector('#error');
 
-  pictures.forEach((picture) => {
-    fragment.append(window.picture.renderPicture(picture));
+  const loadingSuccessHandler = (pictures) => {
+    const fragment = document.createDocumentFragment();
 
-    const pictureElement = fragment.lastElementChild;
-    pictureElement.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      window.preview.openPreviewPopup(picture);
-      window.preview.hidePreviewComments();
+    pictures.forEach((picture) => {
+      fragment.append(window.picture.renderPicture(picture));
+
+      const pictureElement = fragment.lastElementChild;
+      pictureElement.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        window.preview.openPreviewPopup(picture);
+        window.preview.hidePreviewComments();
+      });
     });
-  });
 
-  document.querySelector('.pictures').append(fragment);
+    document.querySelector('.pictures').append(fragment);
+  };
+
+  const loadingErrorHandler = (message) => {
+    const messageElement = errorMessageTemplate.content.cloneNode(true);
+
+    messageElement.querySelector('.error__title').textContent = message;
+    const closeElement = messageElement.querySelector('.error__button');
+    closeElement.textContent = 'Закрыть';
+
+    closeElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      document.querySelector('.error').remove();
+    });
+
+    document.body.prepend(messageElement);
+  };
+
+  window.api.loadPictures(loadingSuccessHandler, loadingErrorHandler);
 })();
