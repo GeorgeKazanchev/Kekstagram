@@ -1,9 +1,9 @@
 'use strict';
 
 (function() {
-  const errorMessageTemplate = document.querySelector('#error');
-
   const PICTURES_COUNT = 25;
+
+  const errorMessageTemplate = document.querySelector('#error');
 
   const loadingSuccessHandler = (pictures) => {
     const fragment = document.createDocumentFragment();
@@ -30,8 +30,7 @@
     const closeElement = messageElement.querySelector('.error__button');
     closeElement.textContent = 'Закрыть';
 
-    closeElement.addEventListener('click', (evt) => {
-      evt.preventDefault();
+    closeElement.addEventListener('click', () => {
       document.querySelector('.error').remove();
     });
 
