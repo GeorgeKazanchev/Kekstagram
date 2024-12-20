@@ -26,7 +26,6 @@
       pictureElement.addEventListener('click', (evt) => {
         evt.preventDefault();
         window.preview.openPreviewPopup(picture);
-        window.preview.hidePreviewComments();
       });
     });
 

@@ -791,10 +791,6 @@ input:invalid {
   padding-left: 65px;
   padding-bottom: 20px;
   position: relative;
-  text-align: left;
-  color: #3b77c0;
-  background: none;
-  border: none;
 }
 
 .comments-loader {
@@ -802,6 +798,10 @@ input:invalid {
   color: #3b77c0;
   background: none;
   border: none;
+}
+
+.comments-loader:hover {
+  color: #212bc0;
 }
 
 .social__text {
