@@ -1,40 +1,14 @@
 'use strict';
 
 (function() {
-  const PICTURES_COUNT = 25;
-
-  const errorMessageTemplate = document.querySelector('#error');
-
   const loadingSuccessHandler = (pictures) => {
-    const fragment = document.createDocumentFragment();
-    const shownPictures = pictures.slice(0, PICTURES_COUNT);
-
-    shownPictures.forEach((picture) => {
-      fragment.append(window.picture.renderPicture(picture));
-
-      const pictureElement = fragment.lastElementChild;
-      pictureElement.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        window.preview.openPreviewPopup(picture);
-        window.preview.hidePreviewComments();
-      });
-    });
-
-    document.querySelector('.pictures').append(fragment);
+    window.render.gallery(pictures);
+    window.filters.setPictures(pictures);
+    window.filters.show();
   };
 
   const loadingErrorHandler = (message) => {
-    const messageElement = errorMessageTemplate.content.cloneNode(true);
-
-    messageElement.querySelector('.error__title').textContent = message;
-    const closeElement = messageElement.querySelector('.error__button');
-    closeElement.textContent = 'Закрыть';
-
-    closeElement.addEventListener('click', () => {
-      document.querySelector('.error').remove();
-    });
-
-    document.body.prepend(messageElement);
+    window.render.error(message);
   };
 
   window.api.loadPictures(loadingSuccessHandler, loadingErrorHandler);
