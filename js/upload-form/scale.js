@@ -5,7 +5,7 @@
   const MAX_SCALE_PERCENT = 100;
   const DELTA_SCALE_PERCENT = 25;
 
-  const uploadImageElement = document.querySelector('.img-upload__preview');
+  const uploadImageElement = document.querySelector('.img-upload__preview > img');
   const scaleInputElement = document.querySelector('.scale__control--value');
   const scaleSmallerElement = document.querySelector('.scale__control--smaller');
   const scaleBiggerElement = document.querySelector('.scale__control--bigger');
