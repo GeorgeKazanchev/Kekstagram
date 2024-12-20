@@ -15,9 +15,8 @@
   const renderComment = (comment) => {
     const commentElement = commentTemplate.content.cloneNode(true);
 
-    const imageNumber = window.util.getRandomInRange(1, 6);
-    commentElement.querySelector('.social__picture').src = `img/avatar-${imageNumber}.svg`;
-    commentElement.querySelector('.social__text').textContent = comment;
+    commentElement.querySelector('.social__picture').src = comment.avatarUrl;
+    commentElement.querySelector('.social__text').textContent = comment.text;
 
     return commentElement;
   };
