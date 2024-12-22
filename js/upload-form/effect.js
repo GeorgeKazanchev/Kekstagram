@@ -21,7 +21,7 @@
     heat: 3,
   };
 
-  const uploadImagePictureElement = document.querySelector('.img-upload__preview img');
+  const uploadImagePreviewElement = document.querySelector('.img-upload__preview img');
   const effectInputElement = document.querySelector('.effect-level__value');
   const effectLevelElement = document.querySelector('.effect-level');
   const effectSliderElement = document.querySelector('.effect-level__slider');
@@ -49,8 +49,8 @@
   const changeImageEffect = (effectLevel) => {
     const effect = document.querySelector('.effects__radio:checked').value;
     const scaledEffectLevel = effectLevel * (MAX_EFFECT_LEVEL[effect] - MIN_EFFECT_LEVEL[effect]);
-    uploadImagePictureElement.style.filter = getEffectFilterValue(effect, scaledEffectLevel);
-    uploadImagePictureElement.className = `effects__preview--${effect}`;
+    uploadImagePreviewElement.style.filter = getEffectFilterValue(effect, scaledEffectLevel);
+    uploadImagePreviewElement.className = `effects__preview--${effect}`;
     effectInputElement.value = effectLevel;
   };
 

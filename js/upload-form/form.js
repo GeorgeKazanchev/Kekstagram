@@ -2,6 +2,7 @@
 
 (function() {
   const DEFAULT_SCALE_PERCENT = 100;
+  const IMAGE_FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
   const uploadSuccessTemplate = document.querySelector('#success');
   const uploadErrorTemplate = document.querySelector('#error');
@@ -11,12 +12,29 @@
   const uploadInputElement = document.querySelector('#upload-file');
   const uploadPopupElement = document.querySelector('.img-upload__overlay');
   const uploadPopupCloseElement = document.querySelector('.img-upload__cancel');
+  const uploadImagePreviewElement = document.querySelector('.img-upload__preview img');
 
   const scaleInputElement = document.querySelector('.scale__control--value');
   const effectLevelElement = document.querySelector('.effect-level');
   const effectSliderElement = document.querySelector('.effect-level__slider');
   const hashtagsInputElement = document.querySelector('.text__hashtags');
   const commentInputElement = document.querySelector('.text__description');
+
+  const setUploadImagePreview = () => {
+    const file = uploadInputElement.files[0];
+    const fileName = file.name.toLowerCase();
+
+    const isImage = IMAGE_FILE_TYPES.some((type) => fileName.endsWith(type));
+    if (isImage) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        uploadImagePreviewElement.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  };
 
   const resetUploadForm = () => {
     uploadInputElement.value = '';
@@ -47,6 +65,7 @@
   };
 
   const openUploadPopup = () => {
+    setUploadImagePreview();
     uploadPopupElement.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', uploadPopupEscPressHandler);
