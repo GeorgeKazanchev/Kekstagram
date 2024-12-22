@@ -13,10 +13,12 @@
   const uploadPopupElement = document.querySelector('.img-upload__overlay');
   const uploadPopupCloseElement = document.querySelector('.img-upload__cancel');
   const uploadImagePreviewElement = document.querySelector('.img-upload__preview img');
+  const effectPreviewElements = document.querySelectorAll('.effects__preview');
 
   const scaleInputElement = document.querySelector('.scale__control--value');
   const effectLevelElement = document.querySelector('.effect-level');
   const effectSliderElement = document.querySelector('.effect-level__slider');
+  const effectNoneElement = document.querySelector('#effect-none');
   const hashtagsInputElement = document.querySelector('.text__hashtags');
   const commentInputElement = document.querySelector('.text__description');
 
@@ -30,6 +32,9 @@
 
       reader.addEventListener('load', () => {
         uploadImagePreviewElement.src = reader.result;
+        effectPreviewElements.forEach((preview) => {
+          preview.style.backgroundImage = `url(${reader.result})`;
+        });
       });
 
       reader.readAsDataURL(file);
@@ -44,7 +49,7 @@
 
     effectLevelElement.classList.add('hidden');
     effectSliderElement.style.left = `calc(100% - ${effectSliderElement.offsetWidth}px / 2)`;
-    document.querySelector('#effect-none').checked = true;
+    effectNoneElement.checked = true;
     window.effect.changeImageEffect(1);
 
     hashtagsInputElement.value = '';
@@ -53,29 +58,32 @@
     commentInputElement.setCustomValidity('');
   };
 
-  const uploadPopupEscPressHandler = (evt) => {
+  const isHashtagsOrDescription = (element) => {
+    return element.matches('.text__hashtags') || element.matches('.text__description');
+  };
+
+  const popupEscPressHandler = (evt) => {
     if (evt.key === 'Escape') {
-      if (evt.target.matches('.text__hashtags')
-        || evt.target.matches('.text__description')) {
+      if (isHashtagsOrDescription(evt.target)) {
         return;
       }
 
-      closeUploadPopup();
+      closePopup();
     }
   };
 
-  const openUploadPopup = () => {
+  const openPopup = () => {
     setUploadImagePreview();
     uploadPopupElement.classList.remove('hidden');
     document.body.classList.add('modal-open');
-    document.addEventListener('keydown', uploadPopupEscPressHandler);
+    document.addEventListener('keydown', popupEscPressHandler);
   };
 
-  const closeUploadPopup = () => {
+  const closePopup = () => {
     uploadPopupElement.classList.add('hidden');
     document.body.classList.remove('modal-open');
     resetUploadForm();
-    document.removeEventListener('keydown', uploadPopupEscPressHandler);
+    document.removeEventListener('keydown', popupEscPressHandler);
   };
 
   const closeSuccessPopup = () => {
@@ -91,7 +99,7 @@
   };
 
   const uploadingSuccessHandler = () => {
-    closeUploadPopup();
+    closePopup();
     closeLoader();
     const messageElement = uploadSuccessTemplate.content.cloneNode(true);
     messageElement.querySelector('.success__button').addEventListener('click', () => {
@@ -101,7 +109,7 @@
   };
 
   const uploadingErrorHandler = () => {
-    closeUploadPopup();
+    closePopup();
     closeLoader();
     closeErrorPopup();  //  Может быть несколько окон. Чтобы они не перекрывали друг друга, закрываем предыдущее окно
     const messageElement = uploadErrorTemplate.content.cloneNode(true);
@@ -111,24 +119,24 @@
     document.body.prepend(messageElement);
   };
 
-  const showUploadingLoader = () => {
+  const showLoader = () => {
     const loaderElement = loaderTemplate.content.cloneNode(true);
     document.body.prepend(loaderElement);
     document.body.firstElementChild.style.zIndex = 100;
   };
 
   uploadInputElement.addEventListener('change', () => {
-    openUploadPopup();
+    openPopup();
   });
 
   uploadPopupCloseElement.addEventListener('click', () => {
-    closeUploadPopup();
+    closePopup();
   });
 
   uploadPopupCloseElement.addEventListener('keydown', (evt) => {
     if (evt.key === 'Enter') {
       evt.preventDefault();
-      closeUploadPopup();
+      closePopup();
     }
   });
 
@@ -136,6 +144,6 @@
     evt.preventDefault();
     const data = new FormData(uploadFormElement);
     window.api.uploadPhoto(data, uploadingSuccessHandler, uploadingErrorHandler);
-    showUploadingLoader();
+    showLoader();
   });
 })();

@@ -25,18 +25,20 @@
       const pictureElement = fragment.lastElementChild;
       pictureElement.addEventListener('click', (evt) => {
         evt.preventDefault();
-        window.preview.openPreviewPopup(picture);
+        window.preview.openPopup(picture);
       });
     });
 
-    document.querySelectorAll('.picture').forEach((elem) => elem.remove());
+    document.querySelectorAll('.picture').forEach((element) => {
+      element.remove();
+    });
     document.querySelector('.pictures').append(fragment);
   };
 
-  const renderError = (message) => {
+  const renderError = (errorMessage) => {
     const messageElement = errorMessageTemplate.content.cloneNode(true);
 
-    messageElement.querySelector('.error__title').textContent = message;
+    messageElement.querySelector('.error__title').textContent = errorMessage;
     const closeElement = messageElement.querySelector('.error__button');
     closeElement.textContent = 'Закрыть';
 

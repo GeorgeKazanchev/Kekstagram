@@ -15,13 +15,13 @@
   };
 
   const changeScaleValue = (deltaPercent) => {
-    const prevValue = Number(scaleInputElement.value.replace('%', ''));
-    const newValue = prevValue + deltaPercent;
-    if (newValue < MIN_SCALE_PERCENT || newValue > MAX_SCALE_PERCENT) {
+    const previousValue = Number(scaleInputElement.value.replace('%', ''));
+    const currentValue = previousValue + deltaPercent;
+    if (currentValue < MIN_SCALE_PERCENT || currentValue > MAX_SCALE_PERCENT) {
       return;
     }
-    scaleInputElement.value = `${newValue}%`;
-    changeUploadImageScale(newValue);
+    scaleInputElement.value = `${currentValue}%`;
+    changeUploadImageScale(currentValue);
   };
 
   scaleSmallerElement.addEventListener('click', () => {

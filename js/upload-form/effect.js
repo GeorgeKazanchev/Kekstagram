@@ -2,6 +2,7 @@
 
 (function() {
   const DEFAULT_EFFECT_LEVEL = 1;
+  const EFFECT_LEVEL_PRECISION = 1e+2;  //  Показатель степени равен кол-ву знаков после запятой в уровне эффекта
 
   const MIN_EFFECT_LEVEL = {
     none: 0,
@@ -84,7 +85,7 @@
 
     const changeEffectLevel = () => {
       let effectLevel = (target.offsetLeft - sliderRadius) / fieldWidth;
-      effectLevel = Math.floor(effectLevel * 1e+2) * 1e-2;
+      effectLevel = Math.floor(effectLevel * EFFECT_LEVEL_PRECISION) / EFFECT_LEVEL_PRECISION;
       changeImageEffect(effectLevel);
     };
 
@@ -107,12 +108,12 @@
   });
 
   effectsControlElement.addEventListener('change', (evt) => {
-    const effectButton = evt.target.closest('.effects__radio');
-    if (!effectButton) {
+    const effectButtonElement = evt.target.closest('.effects__radio');
+    if (!effectButtonElement) {
       return;
     }
 
-    const chosenEffect = effectButton.value;
+    const chosenEffect = effectButtonElement.value;
     if (chosenEffect === 'none') {
       effectLevelElement.classList.add('hidden');
     } else {

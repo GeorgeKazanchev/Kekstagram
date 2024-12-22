@@ -9,6 +9,7 @@
   const discussedFilterElement = document.querySelector('#filter-discussed');
 
   let pictures = [];
+  let activeFilter = document.querySelector('.img-filters__button--active');
 
   const setPictures = (data) => {
     pictures = data;
@@ -18,11 +19,10 @@
     filtersContainerElement.classList.remove('img-filters--inactive');
   };
 
-  const resetActiveFilter = () => {
-    const activeElements = filtersContainerElement.querySelectorAll('.img-filters__button--active');
-    activeElements.forEach((elem) => {
-      elem.classList.remove('img-filters__button--active');
-    });
+  const changeActiveFilter = (filterElement) => {
+    activeFilter.classList.remove('img-filters__button--active');
+    filterElement.classList.add('img-filters__button--active');
+    activeFilter = filterElement;
   };
 
   const getRandomPictures = () => {
@@ -45,20 +45,17 @@
 
   const filterByDefault = () => {
     renderWithDebounce(pictures);
-    resetActiveFilter();
-    defaultFilterElement.classList.add('img-filters__button--active');
+    changeActiveFilter(defaultFilterElement);
   };
 
   const filterByRandom = () => {
     renderWithDebounce(getRandomPictures());
-    resetActiveFilter();
-    randomFilterElement.classList.add('img-filters__button--active');
+    changeActiveFilter(randomFilterElement);
   };
 
   const filterByCommentsCount = () => {
     renderWithDebounce(getMostDiscussedPictures());
-    resetActiveFilter();
-    discussedFilterElement.classList.add('img-filters__button--active');
+    changeActiveFilter(discussedFilterElement);
   };
 
   defaultFilterElement.addEventListener('click', () => {
