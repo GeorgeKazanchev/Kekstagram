@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-  const RANDOM_PICTURES_COUNT = 10;
+  const RANDOM_PICTURES_COUNT = 12;
 
   const filtersContainerElement = document.querySelector('.img-filters');
   const defaultFilterElement = document.querySelector('#filter-default');

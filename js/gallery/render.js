@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-  const SHOWN_PICTURES_COUNT = 25;
+  const MAX_SHOWN_PICTURES = 33;
 
   const pictureTemplate = document.querySelector('#picture');
   const errorMessageTemplate = document.querySelector('#error');
@@ -18,7 +18,7 @@
 
   const renderGallery = (pictures) => {
     const fragment = document.createDocumentFragment();
-    const shownPictures = pictures.slice(0, SHOWN_PICTURES_COUNT);
+    const shownPictures = pictures.slice(0, MAX_SHOWN_PICTURES);
 
     shownPictures.forEach((picture) => {
       fragment.append(renderPicture(picture));
