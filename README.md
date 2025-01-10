@@ -1,5 +1,7 @@
 # &laquo;Кекстаграм&raquo;
-![Логотип сервиса &laquo;Кекстаграм&raquo;](https://github.com/GeorgeKazanchev/Kekstagram/blob/main/img/kekstagram-logo.png)
+<section align="center">
+    <img width="300" src="https://github.com/GeorgeKazanchev/Kekstagram/blob/main/img/kekstagram-logo.png" alt="Логотип сервиса &laquo;Кекстаграм&raquo;">
+</section>
 
 &nbsp;&laquo;Кекстаграм&raquo; &dash; сервис просмотра фотографий. Благодаря нему вы сможете делиться с миром своими фотографиями и просматривать фотографии других пользователей, комментировать их и ставить лайки. Сервис даёт возможность редактировать изображения перед добавлением: вы сможете кадрировать своё фото и наложить на него фильтры.
 
