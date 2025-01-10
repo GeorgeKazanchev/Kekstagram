@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint **/*.js",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "start": "cd backend && npm run start"
   },
   "devDependencies": {
     "@eslint/js": "8.57.1",
