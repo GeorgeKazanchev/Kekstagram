@@ -195,7 +195,7 @@ input:invalid {
 .picture__img {
   max-width: none;
   width: 100%;
-  height: auto;
+  object-fit: cover;
 }
 
 .picture__info {
@@ -675,6 +675,7 @@ input:invalid {
 
 .big-picture__img img {
   display: block;
+  object-fit: cover;
 }
 
 .social {
@@ -1059,6 +1060,7 @@ input:invalid {
   margin: 0;
   margin-bottom: 50px;
   font-size: 32px;
+  line-height: 1.2;
 }
 
 .success__title {
