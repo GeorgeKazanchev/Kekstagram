@@ -6,11 +6,15 @@
   "scripts": {
     "lint": "eslint **/*.js",
     "test": "npm run lint",
-    "start": "cd backend && npm run start"
+    "frontend:start": "http-server -o --cors",
+    "backend:start": "cd backend && npm run start",
+    "start": "concurrently --kill-others \"npm run backend:start\" \"npm run frontend:start\""
   },
   "devDependencies": {
     "@eslint/js": "8.57.1",
-    "eslint": "8.57.1"
+    "concurrently": "9.1.2",
+    "eslint": "8.57.1",
+    "http-server": "14.1.1"
   },
   "repository": {
     "type": "git",
