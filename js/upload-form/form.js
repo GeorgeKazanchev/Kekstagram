@@ -2,7 +2,7 @@
 
 (function() {
   const DEFAULT_SCALE_PERCENT = 100;
-  const IMAGE_FILE_TYPES = ['jpg', 'jpeg', 'png'];
+  const IMAGE_FILE_TYPES = ['jpg', 'jpeg', 'png', 'webp'];
 
   const uploadSuccessTemplate = document.querySelector('#success');
   const uploadErrorTemplate = document.querySelector('#error');
@@ -27,18 +27,20 @@
     const fileName = file.name.toLowerCase();
 
     const isImage = IMAGE_FILE_TYPES.some((type) => fileName.endsWith(type));
-    if (isImage) {
-      const reader = new FileReader();
-
-      reader.addEventListener('load', () => {
-        uploadImagePreviewElement.src = reader.result;
-        effectPreviewElements.forEach((preview) => {
-          preview.style.backgroundImage = `url(${reader.result})`;
-        });
-      });
-
-      reader.readAsDataURL(file);
+    if (!isImage) {
+      throw new window.FileFormatError('Uploaded file has unsupported format');
     }
+
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      uploadImagePreviewElement.src = reader.result;
+      effectPreviewElements.forEach((preview) => {
+        preview.style.backgroundImage = `url(${reader.result})`;
+      });
+    });
+
+    reader.readAsDataURL(file);
   };
 
   const resetUploadForm = () => {
@@ -73,10 +75,19 @@
   };
 
   const openPopup = () => {
-    setUploadImagePreview();
-    uploadPopupElement.classList.remove('hidden');
-    document.body.classList.add('modal-open');
-    document.addEventListener('keydown', popupEscPressHandler);
+    try {
+      setUploadImagePreview();
+      uploadPopupElement.classList.remove('hidden');
+      document.body.classList.add('modal-open');
+      document.addEventListener('keydown', popupEscPressHandler);
+    } catch (err) {
+      if (err instanceof window.FileFormatError) {
+        window.render.error(`Файл имеет некорректный формат.\n
+          Поддерживаемые форматы: ${IMAGE_FILE_TYPES.join(', ')}`);
+      } else {
+        window.render.error(err.message);
+      }
+    }
   };
 
   const closePopup = () => {
@@ -101,6 +112,9 @@
   const uploadingSuccessHandler = () => {
     closePopup();
     closeLoader();
+
+    window.api.loadPictures(window.gallery.update, window.gallery.showError);
+
     const messageElement = uploadSuccessTemplate.content.cloneNode(true);
     messageElement.querySelector('.success__button').addEventListener('click', () => {
       closeSuccessPopup();
@@ -112,6 +126,7 @@
     closePopup();
     closeLoader();
     closeErrorPopup();  //  Может быть несколько окон. Чтобы они не перекрывали друг друга, закрываем предыдущее окно
+
     const messageElement = uploadErrorTemplate.content.cloneNode(true);
     messageElement.querySelector('.error__button').addEventListener('click', () => {
       closeErrorPopup();

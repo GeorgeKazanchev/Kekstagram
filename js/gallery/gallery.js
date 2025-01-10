@@ -1,15 +1,20 @@
 'use strict';
 
 (function() {
-  const loadingSuccessHandler = (pictures) => {
+  const updateGallery = (pictures) => {
     window.render.gallery(pictures);
     window.filters.setPictures(pictures);
     window.filters.show();
   };
 
-  const loadingErrorHandler = (message) => {
+  const showError = (message) => {
     window.render.error(message);
   };
 
-  window.api.loadPictures(loadingSuccessHandler, loadingErrorHandler);
+  window.api.loadPictures(updateGallery, showError);
+
+  window.gallery = {
+    update: updateGallery,
+    showError,
+  };
 })();
