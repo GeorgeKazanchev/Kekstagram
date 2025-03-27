@@ -8,7 +8,12 @@
     "test": "npm run lint",
     "frontend:start": "http-server -o --cors",
     "backend:start": "cd backend && npm run start",
-    "start": "concurrently --kill-others \"npm run backend:start\" \"npm run frontend:start\""
+    "start": "concurrently --kill-others \"npm run backend:start\" \"npm run frontend:start\"",
+    "start-server": "nodemon ./web-server.js"
+  },
+  "dependencies": {
+    "express": "4.21.2",
+    "nodemon": "3.1.9"
   },
   "devDependencies": {
     "@eslint/js": "8.57.1",

@@ -6,10 +6,11 @@
   "license": "ISC",
   "description": "",
   "scripts": {
-    "start": "node ./app.js"
+    "start": "nodemon ./app.js"
   },
   "dependencies": {
     "express": "4.21.2",
-    "multer": "1.4.5-lts.1"
+    "multer": "1.4.5-lts.1",
+    "nodemon": "3.1.9"
   }
 }
