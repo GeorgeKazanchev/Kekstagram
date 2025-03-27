@@ -13,6 +13,8 @@ const upload = multer({
 
 const app = express();
 
+app.use(express.static('img'));
+
 app.get('/data', (_, response) => {
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.send(data.pictures);

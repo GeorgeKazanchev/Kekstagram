@@ -1,7 +1,7 @@
 const { HOST, PORT } = require('./settings');
 
-const PHOTO_BASE_PATH = `http://${HOST}:${PORT}/img/photos`;
-const AVATAR_BASE_PATH = `http://${HOST}:${PORT}/img/avatars`;
+const PHOTO_BASE_PATH = `http://${HOST}:${PORT}/photos`;
+const AVATAR_BASE_PATH = `http://${HOST}:${PORT}/avatars`;
 
 const pictures = [
   {
