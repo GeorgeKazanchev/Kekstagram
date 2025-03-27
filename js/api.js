@@ -1,9 +1,13 @@
 'use strict';
 
 (function() {
-  const BASE_URL = 'http://localhost:3000';
   const TIMEOUT = 5000;
   const STATUS_OK = 200;
+
+  const SERVER_HOST = '85.119.146.124';
+  const SERVER_PORT = 3001;
+
+  const baseUrl = `http://${SERVER_HOST}:${SERVER_PORT}`;
 
   const getXHR = (onLoad, onError) => {
     const xhr = new XMLHttpRequest();
@@ -32,13 +36,13 @@
 
   const loadPictures = (onLoad, onError) => {
     const xhr = getXHR(onLoad, onError);
-    xhr.open('GET', `${BASE_URL}/data`);
+    xhr.open('GET', `${baseUrl}/data`);
     xhr.send();
   };
 
   const uploadPhoto = (data, onLoad, onError) => {
     const xhr = getXHR(onLoad, onError);
-    xhr.open('POST', `${BASE_URL}/`);
+    xhr.open('POST', `${baseUrl}/`);
     xhr.send(data);
   };
 

@@ -1,7 +1,10 @@
 const express = require('express');
 const multer = require('multer');
 
+const { PORT } = require('./settings');
 const data = require('./data');
+
+const DATA_URI_PREFIX = 'data:image/png;charset=utf-8;base64,';
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -10,10 +13,7 @@ const upload = multer({
 
 const app = express();
 
-const PORT = 3000;
-const DATA_URI_PREFIX = 'data:image/png;charset=utf-8;base64,';
-
-app.get('/data', (request, response) => {
+app.get('/data', (_, response) => {
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.send(data.pictures);
 });
@@ -35,6 +35,6 @@ app.post('/', upload.single('filename'), (request, response) => {
   response.send(picture);
 });
 
-app.listen(PORT, 'localhost', function() {
+app.listen(PORT, function() {
   console.log(`Server is started at port ${PORT}`);
 });
